@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Análisis, arquitectura y tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # El historial completo permite comparar el PR con su rama base.
+          fetch-depth: 0
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.47.7
+          cache: true
+
+      - name: Instalar Melos
+        run: dart pub global activate melos 8.9.0
+
+      - name: Resolver el workspace
+        run: melos bootstrap
+
+      # En main, la verificación completa: analyze + verify:arch + test. Los
+      # tests de Isar descargan su librería nativa la primera vez.
+      - name: Verificar todo
+        if: github.event_name != 'pull_request'
+        run: melos run verify
+
+      # En un PR, el análisis y las reglas de arquitectura de todo el
+      # workspace, y las pruebas de los paquetes cambiados y de los que
+      # dependen de ellos (todas si cambia algo fuera de packages/).
+      - name: Analizar
+        if: github.event_name == 'pull_request'
+        run: melos run analyze
+
+      - name: Reglas de arquitectura
+        if: github.event_name == 'pull_request'
+        run: melos run verify:arch
+
+      - name: Pruebas de lo que cambia
+        if: github.event_name == 'pull_request'
+        run: melos run test:changed

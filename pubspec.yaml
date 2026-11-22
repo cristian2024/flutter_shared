@@ -1,0 +1,93 @@
+name: flutter_shared
+publish_to: none
+
+environment:
+  sdk: ^3.11.0
+
+workspace:
+  # Un solo patrón: pub falla si un patrón no encuentra ningún paquete, y cada
+  # rama de paquete trae solo el suyo.
+  - packages/*/*
+
+dev_dependencies:
+  flutter_lints: ^6.0.0
+  melos: ^8.9.0
+  test: ^1.28.0
+
+melos:
+  repository: https://github.com/cristian2024/flutter_shared
+
+  command:
+    bootstrap:
+      hooks:
+        # El código generado no se versiona: `melos bs` lo genera al terminar.
+        post: melos run gen
+
+  scripts:
+    verify:
+      description: Verificación completa (análisis, arquitectura y pruebas).
+      steps:
+        - analyze
+        - verify:arch
+        - test
+
+    analyze:
+      description: Análisis estático del workspace (falla con cualquier problema salvo las reglas en adopción de tool/analyze.dart).
+      run: dart run tool/analyze.dart
+
+    test:
+      description: Ejecuta las pruebas de todos los paquetes y del tooling.
+      steps:
+        - test:flutter
+        - test:dart
+        - test:tool
+
+    test:flutter:
+      description: Pruebas de los paquetes que dependen de Flutter.
+      packageFilters:
+        flutter: true
+        dirExists: test
+      exec:
+        command: flutter test
+        concurrency: 1
+
+    test:dart:
+      description: Pruebas de los paquetes Dart puros.
+      packageFilters:
+        flutter: false
+        dirExists: test
+      exec:
+        command: dart test
+        concurrency: 1
+
+    test:tool:
+      description: Pruebas del verificador de arquitectura y del análisis.
+      run: dart test tool/test
+
+    test:changed:
+      description: Pruebas de los paquetes que cambian respecto a origin/main y de los que dependen de ellos (todas si cambia algo fuera de packages/). Es lo que ejecuta la CI en un PR.
+      run: bash tool/test_changed.sh origin/main
+
+    verify:arch:
+      description: Verifica las reglas de importación entre paquetes (tool/src/architecture_rules.dart).
+      run: dart run tool/verify_architecture.dart
+
+    gen:
+      description: Genera el código que no se versiona (Isar y Slang).
+      steps:
+        - gen:isar
+        - gen:i18n
+
+    gen:isar:
+      description: Genera los esquemas de Isar con build_runner.
+      packageFilters:
+        dependsOn: build_runner
+      exec:
+        command: dart run build_runner build
+
+    gen:i18n:
+      description: Genera las traducciones de Slang.
+      packageFilters:
+        fileExists: slang.yaml
+      exec:
+        command: dart run slang
