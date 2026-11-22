@@ -25,3 +25,7 @@ Cada paquete define sus claves en `lib/src/i18n/{es,en}.i18n.json`: son su contr
 ```sh
 flutter test
 ```
+
+## Código generado
+
+El código generado (`*.g.dart`) va versionado, porque los proyectos usan el paquete por git y pub no lo genera en las dependencias. Tras cambiar la fuente, `melos run gen` y subirlo junto.
