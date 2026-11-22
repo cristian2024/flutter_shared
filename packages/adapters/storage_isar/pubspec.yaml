@@ -1,6 +1,6 @@
 name: storage_isar
 description: Adaptador de almacenamiento sobre Isar (isar_community) - abre la base y registra sus repositorios en el ServiceLocator.
-version: 0.3.0
+version: 0.3.1
 publish_to: none
 
 environment:
@@ -10,8 +10,18 @@ environment:
 resolution: workspace
 
 dependencies:
-  core_contracts: ^0.1.1
-  core_di: ^0.1.1
+  core_contracts:
+    git:
+      url: https://github.com/cristian2024/flutter_shared.git
+      path: packages/core/core_contracts
+      tag_pattern: core_contracts-v{{version}}
+    version: ^0.1.4
+  core_di:
+    git:
+      url: https://github.com/cristian2024/flutter_shared.git
+      path: packages/core/core_di
+      tag_pattern: core_di-v{{version}}
+    version: ^0.1.2
   flutter:
     sdk: flutter
   isar_community: 3.4.1
