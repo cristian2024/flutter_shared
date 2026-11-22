@@ -40,3 +40,7 @@ flutter test
 ```
 
 `IsarPluginPreferenceRepository` pasa `pluginPreferenceRepositoryContract`.
+
+## Código generado
+
+El código generado (`*.g.dart`) va versionado, porque los proyectos usan el paquete por git y pub no lo genera en las dependencias. Tras cambiar la fuente, `melos run gen` y subirlo junto.

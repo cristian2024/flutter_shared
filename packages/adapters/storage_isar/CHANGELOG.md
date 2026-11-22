@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.2 - 2026-11-22
+
+### Corregido
+
+- El esquema de Isar de las preferencias de plugins (`isar_plugin_preference.g.dart`) se versiona. Sin él, un proyecto que usaba el paquete por git no compilaba: pub no genera código en las dependencias.
+
 ## 0.3.1 - 2026-11-22
 
 ### Corregido
