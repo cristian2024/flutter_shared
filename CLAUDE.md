@@ -10,7 +10,7 @@ Paquetes compartidos entre proyectos (Alba, home_tasks…). Mismas convenciones 
 ## Estructura
 - `packages/core/*`: contratos transversales. `packages/shared/*`: utilidades reutilizables. `packages/adapters/*`: tecnologías concretas (solo ellos importan motores de base de datos y SDKs de plataforma).
 - Cada paquete declara `resolution: workspace` y queda cubierto por la lista `workspace:` del `pubspec.yaml` raíz. No hay `melos.yaml`.
-- Entre paquetes del repo, `^x.y.z`, nunca `any`.
+- Un paquete que depende de otro de este repo lo declara por git con su etiqueta y un rango (`git: url, path, tag_pattern` + `version: ^x.y.z`, nunca `any`), igual que un proyecto consumidor. Solo con versión, fuera del repo pub lo busca en pub.dev y falla (o se cuela un paquete ajeno con ese nombre). Dentro del workspace pub usa la copia local; los paquetes del workspace no se pueden sobrescribir con `dependency_overrides`.
 
 ## Versiones y etiquetas
 - Una rama (y un PR) por paquete; la raíz (`pubspec.yaml`, `tool/`, `.github/`, docs) es otro proyecto.
