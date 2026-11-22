@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.1 - 2026-11-22
+
+### Corregido
+
+- `core_contracts` y `core_di` se declaran por git con su etiqueta. Antes, un proyecto que usaba `storage_isar` por git fallaba al resolver, porque pub los buscaba en pub.dev.
+
 ## 0.3.0 - 2026-11-21
 
 ### Cambiado
