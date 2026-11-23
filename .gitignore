@@ -3,6 +3,9 @@
 .packages
 build/
 pubspec_overrides.yaml
+# Repo de librerías: cada proyecto resuelve sus versiones y la CI prueba
+# contra lo último que admiten los rangos.
+pubspec.lock
 .flutter-plugins
 .flutter-plugins-dependencies
 coverage/
