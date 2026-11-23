@@ -1,0 +1,3 @@
+# Código generado versionado: sin él, el paquete no compila consumido por git
+# (pub no ejecuta build_runner ni slang en las dependencias).
+!*.g.dart
