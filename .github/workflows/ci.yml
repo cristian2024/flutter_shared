@@ -32,6 +32,19 @@ jobs:
       - name: Resolver el workspace
         run: melos bootstrap
 
+      # `melos bootstrap` acaba regenerando el código (slang e Isar). Los
+      # paquetes versionan sus `*.g.dart` porque se usan por git; si alguno
+      # cambia o aparece uno nuevo, se cambió la fuente sin regenerar.
+      - name: Código generado al día
+        run: |
+          changed="$(git status --porcelain -- '*.g.dart')"
+          if [ -n "$changed" ]; then
+            echo "::error::El código generado no coincide con su fuente. Ejecuta 'melos run gen' y sube el resultado."
+            echo "$changed"
+            git diff -- '*.g.dart'
+            exit 1
+          fi
+
       # En main, la verificación completa: analyze + verify:arch + test. Los
       # tests de Isar descargan su librería nativa la primera vez.
       - name: Verificar todo
