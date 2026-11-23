@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.3 - 2026-11-22
+
+### Corregido
+
+- El código de traducciones de slang (`lib/src/i18n/*.g.dart`) se versiona. Sin él, un proyecto que usaba el paquete por git no compilaba: pub no genera código en las dependencias.
+
 ## 0.1.2 - 2026-10-29
 
 ### Añadido

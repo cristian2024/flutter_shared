@@ -12,3 +12,5 @@ class_name: CoreUiTranslations
 # Carga diferida solo aporta en web; en móvil impide cambiar de idioma de forma síncrona.
 lazy: false
 translation_overrides: true
+# Sin fecha en la cabecera: el generado está versionado y no debe cambiar al regenerar.
+timestamp: false
