@@ -20,7 +20,8 @@ melos:
   command:
     bootstrap:
       hooks:
-        # El código generado no se versiona: `melos bs` lo genera al terminar.
+        # `melos bs` regenera el código al terminar (los paquetes lo versionan
+        # y la CI comprueba que no cambie).
         post: melos run gen
 
   scripts:
@@ -73,7 +74,7 @@ melos:
       run: dart run tool/verify_architecture.dart
 
     gen:
-      description: Genera el código que no se versiona (Isar y Slang).
+      description: Genera el código de Isar y Slang (versionado en cada paquete).
       steps:
         - gen:isar
         - gen:i18n

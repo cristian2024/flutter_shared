@@ -9,7 +9,8 @@ Paquetes compartidos entre proyectos (Alba, home_tasks…). Mismas convenciones 
 
 ## Estructura
 - `packages/core/*`: contratos transversales. `packages/shared/*`: utilidades reutilizables. `packages/adapters/*`: tecnologías concretas (solo ellos importan motores de base de datos y SDKs de plataforma).
-- **Código generado versionado:** un paquete con `*.g.dart` (slang, Isar) lo versiona con un `.gitignore` propio (`!*.g.dart`): los proyectos lo usan por git y pub no genera código en las dependencias. slang con `timestamp: false`, para que regenerar no cambie el archivo. Tras cambiar la fuente, `melos run gen` y subirlo junto.
+- **`pubspec.lock` sin versionar:** es un repo de librerías; los proyectos que lo usan resuelven sus propias versiones, y la CI resuelve de cero para probar contra lo último que admiten los rangos.
+- **Código generado versionado:** un paquete con `*.g.dart` (slang, Isar) lo versiona con un `.gitignore` propio (`!*.g.dart`): los proyectos lo usan por git y pub no genera código en las dependencias. slang con `timestamp: false`, para que regenerar no cambie el archivo. Tras cambiar la fuente, `melos run gen` y subirlo junto: la CI regenera y falla si algún `*.g.dart` cambia.
 - Cada paquete declara `resolution: workspace` y queda cubierto por la lista `workspace:` del `pubspec.yaml` raíz. No hay `melos.yaml`.
 - Un paquete que depende de otro de este repo lo declara por git con su etiqueta y un rango (`git: url, path, tag_pattern` + `version: ^x.y.z`, nunca `any`), igual que un proyecto consumidor. Solo con versión, fuera del repo pub lo busca en pub.dev y falla (o se cuela un paquete ajeno con ese nombre). Dentro del workspace pub usa la copia local; los paquetes del workspace no se pueden sobrescribir con `dependency_overrides`.
 
